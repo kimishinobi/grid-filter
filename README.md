@@ -4,14 +4,16 @@
 
 From project folder (grid-filter) do the following
 
-Install packages
+1) Install packages
 
 $ npm install
 
-Build project
+2) Build project
 
 $ npm run build
 
-Build in development mode
+3) Have a web server (such as MAMP) serve the dist folder
+
+4) Build in development mode
 
 $ npm run start:dev
