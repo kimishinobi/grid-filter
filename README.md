@@ -6,7 +6,9 @@ From project folder (grid-filter) do the following
 
 1) Install packages
 
-  $ npm install
+```
+$ npm install
+```
 
 2) Build project
 
