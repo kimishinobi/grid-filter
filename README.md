@@ -2,7 +2,7 @@
 
 ## Build
 
-From project folder (**grid-filter**) do the following
+From project folder **grid-filter** do the following
 
 1) Install packages
 
