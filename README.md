@@ -10,7 +10,7 @@ From project folder **grid-filter** do the following
 $ npm install
 ```
 
-2) Build project
+2) Build app
 
 ```
 $ npm run build
