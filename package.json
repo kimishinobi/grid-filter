@@ -1,7 +1,7 @@
 {
-  "name": "filter-grid",
+  "name": "grid-filter",
   "version": "1.0.0",
-  "description": "filter grid and data cards",
+  "description": "grid and data cards filter",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,9 +9,13 @@
     "start:dev": "webpack-dev-server"
   },
   "keywords": [
-    "filter",
     "grid",
-    "card"
+    "card",
+    "filter",
+    "react",
+    "bootstrap",
+    "sass",
+    "webpack"
   ],
   "author": "8kimpham@gmail.com",
   "license": "ISC",
