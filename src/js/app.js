@@ -1,31 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MediaQuery from 'react-responsive'
 
 class FilterOption extends React.Component {
   constructor (props) {
     super(props)
-    this.handleClick = this.handleClick.bind(this)
+    this.optionClick = this.optionClick.bind(this)
   }
-  handleClick (event) {
+  optionClick (event) {
     this.props.filterClick(event, this.props.filter)
   }
   render () {
     return (
-      <MediaQuery query="(min-width: 0px)">
-        <MediaQuery query="(min-width: 576px)">
-          <div className={"filter-option" + (this.props.selected ? " selected" : "")}
-            onClick={this.handleClick}>
-            {this.props.filter}
-          </div>
-        </MediaQuery>
-        <MediaQuery query="(max-width: 575px)">
-          <div className={"filter-option" + (this.props.selected ? " selected" : "")}
-            onClick={this.handleClick}>
-            {this.props.filter}
-          </div>
-        </MediaQuery>
-      </MediaQuery>
+      <option
+        value={this.props.filter}
+        className={"filter-option" + (this.props.selected ? " selected" : "")}
+        onClick={this.optionClick}>
+        {this.props.filter}
+      </option>
     )
   }
 }
@@ -40,69 +31,29 @@ class FilterSelect extends React.Component {
   }
 
   selectClick (event) {
-    console.log('selectClick')
     event.preventDefault()
     this.setState({
       open: !this.state.open
     })
-    document.getElementById("filter-select").scrollTop = 0
   }
 
   render () {
-    const filters = Object.entries(this.props.filters)
-      .map(([filter, selected]) => {
-        return (
-          <FilterOption key={filter} filter={filter} selected={selected} filterClick={this.props.filterClick} />
-        )
-      })
     return (
-      <MediaQuery query="(min-width: 0px)">
-        <MediaQuery query="(min-width: 576px)">
-          <div className="filter-select">
-            {filters}
-          </div>
-        </MediaQuery>
-        <MediaQuery query="(max-width: 576px)">
-          <div id="filter-select" className={"filter-select" + (this.state.open ? " open" : "")}>
-            {filters}
-            <div className="arrow" onClick={this.selectClick}>
-              <svg viewBox="0 0 20 20" width="20" height="20">
-                <path d="M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z">
-                </path>
-              </svg>
-            </div>
-          </div>
-        </MediaQuery>
-      </MediaQuery>
+      <div className="filter-select-wrap"  onClick={this.selectClick}>
+        <select multiple
+          id="filter-select"
+          className={"filter-select" + (this.state.open ? " open" : "")}>
+          {Object.entries(this.props.filters)
+            .map(([filter, selected]) => {
+              return (
+                <FilterOption key={filter} filter={filter} selected={selected} filterClick={this.props.filterClick} />
+              )
+            })}
+        </select>
+        <div className={"arrow" + (this.state.open ? "" : " down")}></div>
+      </div>
     )
   }
-}
-
-function Grid (props) {
-  // console.log('props.filters', props.filters)
-  return (
-    <div className="grid">
-      {props.cards.filter((card) => {
-        let show = true
-        Object.entries(props.filters).forEach(([filter, selected]) => {
-          // console.log('filter', filter)
-          // console.log('selected', selected)
-          if (selected) {
-            if (card.tags.indexOf(filter) == -1) {
-              // console.log('show false')
-              show = false
-            }
-          }
-        })
-        return show
-      })
-      .map((card) => {
-        return (
-          <Card key={card.id} card={card} />
-        )
-      })}
-    </div>
-  )
 }
 
 class Card extends React.Component {
@@ -148,6 +99,29 @@ class Card extends React.Component {
   }
 }
 
+function Grid (props) {
+  return (
+    <div className="grid">
+      {props.cards.filter((card) => {
+        let show = true
+        Object.entries(props.filters).forEach(([filter, selected]) => {
+          if (selected) {
+            if (card.tags.indexOf(filter) == -1) {
+              show = false
+            }
+          }
+        })
+        return show
+      })
+      .map((card) => {
+        return (
+          <Card key={card.id} card={card} />
+        )
+      })}
+    </div>
+  )
+}
+
 class App extends React.Component {
   constructor (props) {
     super(props)
@@ -165,7 +139,7 @@ class App extends React.Component {
       .then((json) => {
         // initialize cards
         this.setState({
-          cards: (json.cards) ? json.cards : []
+          cards: (json && json.cards) ? json.cards : []
         })
         // initialize filters
         this.state.cards.map((card) => {
@@ -189,9 +163,6 @@ class App extends React.Component {
       filters: filters
     })
   }
-
-  // componentWillUnmount () {
-  // }
 
   render () {
     return (
